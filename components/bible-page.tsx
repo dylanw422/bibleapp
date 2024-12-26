@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { Tools } from "@/components/tools";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useVerseStore } from "@/stores/verse-store";
+import { useBibleStore } from "@/stores/bible-store";
 
 export interface Scripture {
   book: string;
@@ -29,11 +31,12 @@ export function BiblePage({
     relativeX: 0,
     relativeY: 0,
   });
-  const [verse, setVerse] = useState<Scripture | undefined>();
+  const { verse, setVerse } = useVerseStore();
+  const { bibles } = useBibleStore();
 
-  const bible = JSON.parse(version);
+  const bible = bibles[version];
   const bookIndex = parseInt(book) - 1;
-  const filterByBook = bible.filter((scripture: Scripture) => {
+  const filterByBook = bible?.filter((scripture: Scripture) => {
     const bookName = books[bookIndex]?.name;
 
     if (typeof scripture.book === "string") {
@@ -82,7 +85,7 @@ export function BiblePage({
 
   return (
     <div className="flex flex-col w-full min-h-screen">
-      {filterByBook.map((scripture: Scripture, index: number) => {
+      {filterByBook?.map((scripture: Scripture, index: number) => {
         const isNewChapter = parseInt(scripture.chapter) !== lastChapter;
         if (isNewChapter) {
           lastChapter = parseInt(scripture.chapter);
@@ -90,6 +93,8 @@ export function BiblePage({
 
         // Split the text and highlight the parts between < and >
         const processedText = scripture.text
+          .replace(/\n/g, "")
+          .replace(/’(\s)([a-zA-Z])\b/g, "’$2")
           .split(/(<.*?>)/g)
           .map((part, i) => {
             if (part.startsWith("<") && part.endsWith(">")) {

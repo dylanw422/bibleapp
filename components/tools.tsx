@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { motion } from "motion/react";
 import { X } from "lucide-react";
 import { BookCopy, Scroll, Pencil, BookOpenCheck } from "lucide-react";
 import { Scripture } from "./bible-page";
+import { useToolStore } from "@/stores/tool-store";
 
 export function Tools({
   position,
@@ -13,6 +13,7 @@ export function Tools({
   verse: Scripture | undefined;
   onClose: () => void;
 }) {
+  const { tool, setTool } = useToolStore();
   const buttons = [
     {
       value: "Compare",
@@ -34,7 +35,7 @@ export function Tools({
 
   return (
     <motion.div
-      className={`absolute z-20 bg-primary-foreground shadow-md border border-input rounded-lg p-4 pb-0 pr-10 text-sm text-primary`}
+      className={`absolute z-20 bg-primary-foreground shadow-md border border-input rounded-lg pb-0 p-2 pt-4 pr-10 text-sm text-primary`}
       initial={{
         scale: 0,
         opacity: 0,
@@ -55,14 +56,19 @@ export function Tools({
         className="absolute top-2 right-2 w-4 h-4 cursor-pointer"
       />
       <div className="flex flex-col items-start space-y-2">
-        <h1 className="font-bold">
+        <h1 className="font-bold px-2">
           {verse?.book} {verse?.chapter}
           {":"}
           {verse?.verse}
         </h1>
         {buttons.map((button, index) => (
           <motion.button
-            className="text-xs w-full text-start rounded-sm text-primary/80 hover:underline transition py-1"
+            onClick={() => {
+              setTool(button.value);
+              onClose();
+              console.log(tool);
+            }}
+            className="text-xs w-full text-start rounded-sm text-primary/80 hover:bg-secondary-foreground/5 transition py-1 px-2"
             key={index}
           >
             <div className="flex items-center">

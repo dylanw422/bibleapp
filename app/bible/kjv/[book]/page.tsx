@@ -1,4 +1,3 @@
-import { kjv } from "@/bibles/kjv/KJV";
 import { BiblePage } from "@/components/bible-page";
 
 export default async function Page({
@@ -7,5 +6,5 @@ export default async function Page({
   params: Promise<{ book: string }>;
 }) {
   const book = (await params).book;
-  return <BiblePage version={JSON.stringify(kjv)} book={book} />;
+  return <BiblePage version="kjv" book={book} />;
 }
