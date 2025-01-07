@@ -4,17 +4,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { Tools } from "@/components/tools";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { useVerseStore } from "@/stores/verse-store";
+import { useVerseStore, Verse } from "@/stores/verse-store";
 import { useBibleStore } from "@/stores/bible-store";
-
-export interface Scripture {
-  book: string;
-  chapter: string;
-  verse: number;
-  text: string;
-  uuid: string;
-  woj: boolean;
-}
+import { useSearchParams } from "next/navigation";
 
 export function BiblePage({
   version,
@@ -24,6 +16,8 @@ export function BiblePage({
   book: string;
 }) {
   const { theme } = useTheme();
+  const searchParams = useSearchParams();
+  const [highlight, setHighlight] = useState(false);
   const [toolOpen, setToolOpen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({
     x: 0,
@@ -34,9 +28,12 @@ export function BiblePage({
   const { verse, setVerse } = useVerseStore();
   const { bibles } = useBibleStore();
 
+  const queryVerse = searchParams.get("verse");
+  const queryChapter = searchParams.get("chapter");
+
   const bible = bibles[version];
   const bookIndex = parseInt(book) - 1;
-  const filterByBook = bible?.filter((scripture: Scripture) => {
+  const filterByBook = bible?.filter((scripture: Verse) => {
     const bookName = books[bookIndex]?.name;
 
     if (typeof scripture.book === "string") {
@@ -50,13 +47,26 @@ export function BiblePage({
   let lastChapter = -1;
 
   useEffect(() => {
-    const chapters = document.querySelectorAll("[id]"); // Select elements with `id`
+    if (queryVerse && queryChapter) {
+      // Trigger the highlight when the verse and chapter from the query params match
+      setHighlight(true);
 
+      // Remove the highlight after 1 second
+      const timer = setTimeout(() => {
+        setHighlight(null); // Reset to remove highlight
+      }, 1000);
+
+      return () => clearTimeout(timer); // Cleanup the timer on component unmount
+    }
+  }, [queryVerse, queryChapter]);
+
+  // Track the current chapter when scrolled to
+  useEffect(() => {
+    const chapters = document.querySelectorAll("[id]");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Update the URL fragment when a chapter comes into view
             const id = entry.target.getAttribute("id");
             if (id) {
               window.history.replaceState(null, "", `#${id}`);
@@ -66,11 +76,7 @@ export function BiblePage({
       },
       { root: null, threshold: 0.5 },
     );
-
-    // Observe each chapter element
     chapters.forEach((chapter) => observer.observe(chapter));
-
-    // Cleanup observer on component unmount
     return () => observer.disconnect();
   }, []);
 
@@ -85,7 +91,7 @@ export function BiblePage({
 
   return (
     <div className="flex flex-col w-full min-h-screen">
-      {filterByBook?.map((scripture: Scripture, index: number) => {
+      {filterByBook?.map((scripture: Verse, index: number) => {
         const isNewChapter = parseInt(scripture.chapter) !== lastChapter;
         if (isNewChapter) {
           lastChapter = parseInt(scripture.chapter);
@@ -95,6 +101,7 @@ export function BiblePage({
         const processedText = scripture.text
           .replace(/\n/g, "")
           .replace(/’(\s)([a-zA-Z])\b/g, "’$2")
+          .replace(/([,.!?;:])([a-zA-Z])/g, "$1 $2")
           .split(/(<.*?>)/g)
           .map((part, i) => {
             if (part.startsWith("<") && part.endsWith(">")) {
@@ -120,7 +127,7 @@ export function BiblePage({
             {isNewChapter && (
               <h2
                 id={scripture.chapter}
-                className="text-2xl font-bold mt-6 mb-2"
+                className="text-2xl font-bold mt-3 mb-2"
               >
                 Chapter {scripture.chapter}
               </h2>
@@ -130,12 +137,21 @@ export function BiblePage({
                 {scripture.verse + " "}
               </span>
               <span
+                style={{
+                  backgroundColor:
+                    highlight &&
+                    scripture.verse.toString() === queryVerse &&
+                    scripture.chapter === queryChapter
+                      ? "yellow"
+                      : "transparent",
+                  transition: "background-color 1s ease-in-out",
+                }}
                 onClick={(e) => {
                   captureCursorPosition(e);
                   setToolOpen(true);
                   setVerse(scripture);
                 }}
-                className="hover:cursor-pointer hover:border-b hover:border-dotted hover:border-primary"
+                className="hover:cursor-pointer hover:border-b hover:border-dotted hover:border-primary lg:text-base text-md"
               >
                 {processedText}
               </span>
@@ -149,7 +165,7 @@ export function BiblePage({
             <Tools
               position={cursorPosition}
               onClose={() => setToolOpen(false)}
-              verse={verse}
+              verse={verse ? verse : undefined}
             />
           </motion.div>
         )}

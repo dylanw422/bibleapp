@@ -22,7 +22,7 @@ export function AppSidebar({ version }: { version: string }) {
   return (
     <Sidebar>
       <SidebarHeader />
-      <SidebarContent>
+      <SidebarContent className="">
         {books.map((book, index) => {
           return (
             <Accordion type="single" collapsible key={index}>

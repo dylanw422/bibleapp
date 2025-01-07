@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { BookCopy, Scroll, Pencil, BookOpenCheck } from "lucide-react";
 import { Scripture } from "./bible-page";
 import { useToolStore } from "@/stores/tool-store";
+import { Verse } from "@/stores/verse-store";
 
 export function Tools({
   position,
@@ -10,7 +11,7 @@ export function Tools({
   onClose,
 }: {
   position: { x: number; y: number; relativeX: number; relativeY: number };
-  verse: Scripture | undefined;
+  verse: Verse | undefined;
   onClose: () => void;
 }) {
   const { tool, setTool } = useToolStore();
@@ -66,7 +67,6 @@ export function Tools({
             onClick={() => {
               setTool(button.value);
               onClose();
-              console.log(tool);
             }}
             className="text-xs w-full text-start rounded-sm text-primary/80 hover:bg-secondary-foreground/5 transition py-1 px-2"
             key={index}

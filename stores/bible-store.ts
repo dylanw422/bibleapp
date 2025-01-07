@@ -24,6 +24,12 @@ export const useBibleStore = create<BibleStore>((set) => ({
       kjv: () => import("../bibles/kjv/KJV").then((module) => module.kjv), // Named export from KJV.js
       nkjv: () => import("../bibles/nkjv/NKJV").then((module) => module.nkjv), // Named export from NKJV.js
       niv: () => import("../bibles/niv/NIV").then((module) => module.niv), // Named export from NIV.js
+      esv: () => import("../bibles/esv/ESV").then((module) => module.esv), // Named export from ESV.js
+      nlt: () => import("../bibles/nlt/NLT").then((module) => module.nlt), // Named export from NLT.js
+      interlinear: () =>
+        import("../bibles/interlinear/INTERLINEAR").then(
+          (module) => module.interlinear,
+        ), // Named export from Interlinear.js
     };
 
     for (const [version, loader] of Object.entries(versions)) {

@@ -1,10 +1,12 @@
 import { create } from "zustand";
 
-interface Verse {
+export interface Verse {
   book: string;
   chapter: string;
   verse: number;
   text: string;
+  translation?: string;
+  diction?: string;
   uuid: string;
 }
 
