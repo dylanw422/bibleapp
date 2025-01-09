@@ -27,12 +27,9 @@ export function VersionSelect() {
   };
 
   return (
-    <div
-      id="select"
-      className="z-10 sticky top-8 flex items-center justify-end"
-    >
+    <div id="select" className="w-1/2 flex items-center justify-end">
       <Select onValueChange={handleVersionChange}>
-        <SelectTrigger className="w-1/5 bg-primary-foreground">
+        <SelectTrigger className="bg-primary-foreground">
           <SelectValue placeholder={currentVersion} />
         </SelectTrigger>
         <SelectContent>
