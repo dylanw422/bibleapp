@@ -10,10 +10,11 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { VersionSelect } from "@/components/version-select";
 import { InterlinearContent } from "@/components/interlinear-content";
 import { ReferenceContent } from "@/components/reference-content";
+import { SearchBar } from "@/components/search-bar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const currentVersion = pathname.split("/")[2].toUpperCase();
+  const currentVersion = pathname.split("/")[2];
   const { verse } = useVerseStore();
   const { bibles, loadAllBibles } = useBibleStore();
 
@@ -26,9 +27,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex flex-row w-full min-h-screen">
         <AppSidebar version={currentVersion} />
         <SidebarTrigger className="sticky top-0" />
-        <div className="lg:w-3/5 w-full min-h-screen lg:p-8 p-4 border-r">
-          <VersionSelect />
-          {children}
+        <div className="lg:w-3/5 w-full min-h-screen pl-4 border-r">
+          <div className="z-10 sticky top-0 py-4 pr-4 w-full border-b flex items-center bg-white justify-between">
+            <SearchBar version={bibles[currentVersion]} />
+            <VersionSelect />
+          </div>
+          <div className="pr-4">{children}</div>
           <CompareContent
             verse={verse}
             currentVersion={currentVersion}
