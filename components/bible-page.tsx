@@ -46,17 +46,14 @@ export function BiblePage({
 
   let lastChapter = -1;
 
+  // Trigger the highlight when the verse and chapter from the query params match
   useEffect(() => {
     if (queryVerse && queryChapter) {
-      // Trigger the highlight when the verse and chapter from the query params match
       setHighlight(true);
-
-      // Remove the highlight after 1 second
       const timer = setTimeout(() => {
-        setHighlight(null); // Reset to remove highlight
-      }, 1000);
-
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount
+        setHighlight(false); // Reset to remove highlight
+      }, 2000);
+      return () => clearTimeout(timer);
     }
   }, [queryVerse, queryChapter]);
 
@@ -80,7 +77,7 @@ export function BiblePage({
     return () => observer.disconnect();
   }, []);
 
-  const captureCursorPosition = (event) => {
+  const captureCursorPosition = (event: MouseEvent) => {
     setCursorPosition({
       x: event.clientX + window.scrollX,
       y: event.clientY + window.scrollY,

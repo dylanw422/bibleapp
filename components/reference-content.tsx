@@ -113,9 +113,7 @@ export function ReferenceContent({
                 </h2>
               )}
               {Object.entries(bibles)
-                .filter(
-                  ([key]) => key.toLowerCase() === currentVersion.toLowerCase(),
-                )
+                .filter(([key]) => key.toLowerCase() === currentVersion)
                 .map(([bibleKey, bibleData]) => {
                   const matchingVerses = bibleData
                     .filter((a: Verse) => a.uuid !== verse?.uuid)

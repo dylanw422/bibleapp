@@ -60,9 +60,7 @@ export function CompareContent({
             <div className="space-y-6">
               <h2 className="text-lg font-semibold">Other Translations</h2>
               {Object.entries(bibles)
-                .filter(
-                  ([key]) => key.toLowerCase() !== currentVersion.toLowerCase(),
-                )
+                .filter(([key]) => key.toLowerCase() !== currentVersion)
                 .filter(([key]) => key !== "interlinear")
                 .map(([bibleKey, bibleData]) => {
                   const matchingVerse = bibleData.find(

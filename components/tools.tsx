@@ -48,7 +48,7 @@ export function Tools({
         opacity: 1,
         top: position.y,
         left: position.x,
-        translateY: position.relativeY < 200 ? "0%" : "-100%",
+        translateY: position.relativeY < 300 ? "0%" : "-100%",
       }}
       transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
     >
