@@ -11,6 +11,7 @@ import { VersionSelect } from "@/components/version-select";
 import { InterlinearContent } from "@/components/interlinear-content";
 import { ReferenceContent } from "@/components/reference-content";
 import { SearchBar } from "@/components/search-bar";
+import { NotesContent } from "@/components/notes-content";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -48,6 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             currentVersion={currentVersion}
             bibles={bibles}
           />
+          <NotesContent verse={verse} />
           <ModeToggle />
         </div>
       </div>
