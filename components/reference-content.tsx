@@ -35,7 +35,7 @@ export function ReferenceContent({
     verse: number,
   ) => {
     router.push(
-      `${books.findIndex((book) => book.name.toLowerCase() === bookName.toLowerCase()) + 1}?chapter=${chapter}&verse=${verse}#${chapter}`,
+      `${books.findIndex((book) => book.name.toLowerCase() === bookName.toLowerCase()) + 1}?chapter=${chapter}&verse=${verse}`,
     );
     setTool(null);
     setHighlight("");

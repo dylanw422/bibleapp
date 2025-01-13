@@ -36,7 +36,7 @@ export function AppSidebar({ version }: { version: string }) {
                       <Button
                         onClick={() =>
                           router.push(
-                            `/bible/${version.toLowerCase()}/${index + 1}#${chapter}`,
+                            `/bible/${version.toLowerCase()}/${index + 1}?chapter=${chapterIndex + 1}`,
                           )
                         }
                         variant={"ghost"}

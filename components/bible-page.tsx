@@ -48,6 +48,24 @@ export function BiblePage({
 
   // Trigger the highlight when the verse and chapter from the query params match
   useEffect(() => {
+    if (queryChapter) {
+      // Try to find the chapter element by ID
+      const chapterElement = document.getElementById(queryChapter);
+
+      if (chapterElement) {
+        const elementPosition =
+          chapterElement.getBoundingClientRect().top + window.pageYOffset;
+
+        const offsetPosition = elementPosition - 100;
+
+        // Scroll to the calculated position
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "auto", // Smooth scrolling for a better user experience
+        });
+      }
+    }
+
     if (queryVerse && queryChapter) {
       setHighlight(true);
       const timer = setTimeout(() => {
@@ -57,27 +75,7 @@ export function BiblePage({
     }
   }, [queryVerse, queryChapter]);
 
-  // Track the current chapter when scrolled to
-  useEffect(() => {
-    const chapters = document.querySelectorAll("[id]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute("id");
-            if (id) {
-              window.history.replaceState(null, "", `#${id}`);
-            }
-          }
-        });
-      },
-      { root: null, threshold: 0.5 },
-    );
-    chapters.forEach((chapter) => observer.observe(chapter));
-    return () => observer.disconnect();
-  }, []);
-
-  const captureCursorPosition = (event: MouseEvent) => {
+  const captureCursorPosition = (event) => {
     setCursorPosition({
       x: event.clientX + window.scrollX,
       y: event.clientY + window.scrollY,
