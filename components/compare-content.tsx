@@ -43,7 +43,9 @@ export function CompareContent({
         <ScrollArea className="flex-1 p-6">
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold">{currentVersion}</h2>
+              <h2 className="text-lg font-semibold">
+                {currentVersion.toUpperCase()}
+              </h2>
               <div className="rounded-md bg-primary/5 p-4">
                 {verse?.text.split(/(<.*?>)/g).map((part, i) => {
                   if (part.startsWith("<") && part.endsWith(">")) {
