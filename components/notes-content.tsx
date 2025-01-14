@@ -11,15 +11,21 @@ import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Verse } from "@/stores/verse-store";
-import { SignInButton, useSession } from "@clerk/clerk-react";
+import { SignInButton, useSession, useUser } from "@clerk/clerk-react";
+import axios from "axios";
 
 export function NotesContent({ verse }: { verse: Verse | null }) {
   const { tool, setTool } = useToolStore();
   const { isSignedIn } = useSession();
+  const { user } = useUser();
   const [note, setNote] = useState("");
 
-  const submitNote = () => {
-    console.log("note: ", note);
+  const submitNote = async () => {
+    await axios.post("/api/addNote", {
+      note,
+      references: verse,
+      forUser: user?.id,
+    });
     setTool(null);
   };
 
