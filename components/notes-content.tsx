@@ -12,6 +12,8 @@ import { X } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Verse } from "@/stores/verse-store";
 import { SignInButton, useSession, useUser } from "@clerk/clerk-react";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/components/query-provider";
 import axios from "axios";
 
 export function NotesContent({ verse }: { verse: Verse | null }) {
@@ -20,12 +22,21 @@ export function NotesContent({ verse }: { verse: Verse | null }) {
   const { user } = useUser();
   const [note, setNote] = useState("");
 
+  const noteMutation = useMutation({
+    mutationFn: () => {
+      return axios.post("/api/addNote", {
+        note,
+        references: verse,
+        forUser: user?.id,
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ["notes"] });
+    },
+  });
+
   const submitNote = async () => {
-    await axios.post("/api/addNote", {
-      note,
-      references: verse,
-      forUser: user?.id,
-    });
+    noteMutation.mutate();
     setTool(null);
   };
 
