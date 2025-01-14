@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getNotes } from "@/lib/queries";
 import { books } from "@/data/books";
 import { Verse } from "@/stores/verse-store";
+import { useSession } from "@clerk/clerk-react";
 
 interface Note {
   id: string;
@@ -32,10 +33,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const currentBookString = books[parseInt(currentBook, 10) - 1]?.name || null;
   const { verse } = useVerseStore();
   const { bibles, loadAllBibles } = useBibleStore();
+  const { isSignedIn } = useSession();
 
   const notesQuery = useQuery({
     queryKey: ["notes"],
-    queryFn: getNotes,
+    queryFn: isSignedIn ? getNotes : () => Promise.resolve([]),
   });
 
   useEffect(() => {
@@ -47,8 +49,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex flex-row w-full min-h-screen">
         <AppSidebar version={currentVersion} />
         <SidebarTrigger className="sticky top-0" />
-        <div className="lg:w-3/5 w-full min-h-screen pl-4 border-r">
-          <div className="z-10 sticky top-0 py-4 pr-4 w-full border-b flex items-center bg-white justify-between">
+        <div className="xl:w-3/4 w-full min-h-screen md:pl-2 pl border-r">
+          <div className="z-10 sticky top-0 py-4 pr-4 w-full border-b flex items-center bg-background justify-between">
             <SearchBar version={bibles[currentVersion]} />
             <VersionSelect />
           </div>
@@ -71,9 +73,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <NotesContent verse={verse} />
           <ModeToggle />
         </div>
-        <div className="w-1/4 sticky top-0 h-screen overflow-y-auto">
+        <div className="xl:w-1/4 w-0 sticky top-0 h-screen overflow-y-auto">
           <NotesSection
-            notes={notesQuery.data?.filter(
+            notes={notesQuery?.data?.filter(
               (note: Note) => note.references.book === currentBookString,
             )}
           />
