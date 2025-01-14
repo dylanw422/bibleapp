@@ -12,12 +12,31 @@ import { InterlinearContent } from "@/components/interlinear-content";
 import { ReferenceContent } from "@/components/reference-content";
 import { SearchBar } from "@/components/search-bar";
 import { NotesContent } from "@/components/notes-content";
+import { NotesSection } from "@/components/notes-section";
+import { useQuery } from "@tanstack/react-query";
+import { getNotes } from "@/lib/queries";
+import { books } from "@/data/books";
+import { Verse } from "@/stores/verse-store";
+
+interface Note {
+  id: string;
+  note: string;
+  references: Verse;
+  forUser: string;
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const currentVersion = pathname.split("/")[2];
+  const currentBook = pathname.split("/")[3];
+  const currentBookString = books[parseInt(currentBook, 10) - 1]?.name || null;
   const { verse } = useVerseStore();
   const { bibles, loadAllBibles } = useBibleStore();
+
+  const notesQuery = useQuery({
+    queryKey: ["notes"],
+    queryFn: getNotes,
+  });
 
   useEffect(() => {
     loadAllBibles();
@@ -51,6 +70,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           />
           <NotesContent verse={verse} />
           <ModeToggle />
+        </div>
+        <div className="w-1/4 sticky top-0 h-screen overflow-y-auto">
+          <NotesSection
+            notes={notesQuery.data?.filter(
+              (note: Note) => note.references.book === currentBookString,
+            )}
+          />
         </div>
       </div>
     </SidebarProvider>
