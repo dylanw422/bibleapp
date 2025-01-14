@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
   return (
-    <div className="fixed bottom-4 right-4">
+    <div className="fixed bottom-4 right-4 z-50">
       {theme === "dark" ? (
         <button
           onClick={() => setTheme("light")}

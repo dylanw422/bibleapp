@@ -85,7 +85,7 @@ export function BiblePage({
   };
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col w-full min-h-screen select-none">
       {filterByBook?.map((scripture: Verse, index: number) => {
         const isNewChapter = parseInt(scripture.chapter) !== lastChapter;
         if (isNewChapter) {

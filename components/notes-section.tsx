@@ -12,6 +12,7 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import { queryClient } from "@/components/query-provider";
 import { useMutation } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Note {
   id: string;
@@ -39,24 +40,30 @@ export function NotesSection({ notes }: { notes: Note[] }) {
   };
 
   return (
-    <div className="p-4 min-h-screen w-full">
+    <div className="p-4 flex flex-col">
       <h1 className="text-2xl font-bold mb-4">Notes</h1>
       {notes?.map((note, index) => {
         return (
-          <div key={index} className="py-2 text-sm border-b relative">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            key={index}
+            className="py-2 text-sm border-b relative"
+          >
             <h1 className="text-primary/70 font-bold">
               {note.references.book} {note.references.chapter}:
               {note.references.verse}
             </h1>
-            <p>{note.note}</p>
+            <p className="pr-10">{note.note}</p>
             <X
               onClick={() => {
                 setConfirm(true);
                 setId(note.id);
               }}
-              className="w-3 h-3 text-primary/50 absolute right-4 top-[50%] translate-y-[-50%] hover:cursor-pointer"
+              className="w-3 h-3 text-primary/50 absolute right-2 top-[50%] translate-y-[-50%] hover:cursor-pointer"
             />
-          </div>
+          </motion.div>
         );
       })}
       <Dialog open={confirm}>
