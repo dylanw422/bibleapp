@@ -2,9 +2,12 @@ import { Search } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Verse } from "@/stores/verse-store";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { books } from "@/data/books";
 
 export function SearchBar({ version }: { version: Verse[] }) {
+  const pathname = usePathname();
+  const currentVersion = pathname.split("/")[2];
   const [search, setSearch] = useState(false);
   const [activeText, setActiveText] = useState<string | null>(null);
   const [results, setResults] = useState<Verse[]>([]);
@@ -13,13 +16,19 @@ export function SearchBar({ version }: { version: Verse[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const updateQueryParams = (newChapter: string, newVerse: string) => {
+  const updateQueryParams = (
+    newBook: string,
+    newChapter: string,
+    newVerse: string,
+  ) => {
     const currentParams = new URLSearchParams(searchParams.toString());
 
     currentParams.set("chapter", newChapter);
     currentParams.set("verse", newVerse);
 
-    router.push(`${window.location.pathname}?${currentParams.toString()}`);
+    router.push(
+      `/bible/${currentVersion}/${books.findIndex((book) => book.name.toLowerCase() === newBook.toLowerCase()) + 1}?${currentParams.toString()}`,
+    );
   };
 
   useEffect(() => {
@@ -145,6 +154,7 @@ export function SearchBar({ version }: { version: Verse[] }) {
                     <div
                       onClick={() =>
                         updateQueryParams(
+                          result.book,
                           result.chapter,
                           result.verse.toString(),
                         )

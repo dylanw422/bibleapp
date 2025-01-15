@@ -12,7 +12,7 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import { queryClient } from "@/components/query-provider";
 import { useMutation } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface Note {
   id: string;
