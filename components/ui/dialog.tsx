@@ -2,9 +2,6 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
-
-import { useToolStore } from "@/stores/tool-store";
 
 import { cn } from "@/lib/utils";
 

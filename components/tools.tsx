@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import { X } from "lucide-react";
 import { BookCopy, Scroll, Pencil, BookOpenCheck } from "lucide-react";
-import { Scripture } from "./bible-page";
 import { useToolStore } from "@/stores/tool-store";
 import { Verse } from "@/stores/verse-store";
 
@@ -14,7 +13,7 @@ export function Tools({
   verse: Verse | undefined;
   onClose: () => void;
 }) {
-  const { tool, setTool } = useToolStore();
+  const { setTool } = useToolStore();
   const buttons = [
     {
       value: "Compare",
