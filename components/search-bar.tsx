@@ -1,11 +1,11 @@
 import { Search } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Verse } from "@/stores/verse-store";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { books } from "@/data/books";
 
-export function SearchBar({ version }: { version: Verse[] }) {
+function SearchBar({ version }: { version: Verse[] }) {
   const pathname = usePathname();
   const currentVersion = pathname.split("/")[2];
   const [search, setSearch] = useState(false);
@@ -179,5 +179,13 @@ export function SearchBar({ version }: { version: Verse[] }) {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export function SearchBarWrapper({ version }: { version: Verse[] }) {
+  return (
+    <Suspense>
+      <SearchBar version={version} />
+    </Suspense>
   );
 }

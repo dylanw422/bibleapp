@@ -10,7 +10,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { VersionSelect } from "@/components/version-select";
 import { InterlinearContent } from "@/components/interlinear-content";
 import { ReferenceContent } from "@/components/reference-content";
-import { SearchBar } from "@/components/search-bar";
+import { SearchBarWrapper as SearchBar } from "@/components/search-bar";
 import { NotesContent } from "@/components/notes-content";
 import { NotesSection } from "@/components/notes-section";
 import { useQuery } from "@tanstack/react-query";
