@@ -2,19 +2,13 @@
 import { books } from "@/data/books";
 import { AnimatePresence, motion } from "motion/react";
 import { Tools } from "@/components/tools";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useTheme } from "next-themes";
 import { useVerseStore, Verse } from "@/stores/verse-store";
 import { useBibleStore } from "@/stores/bible-store";
 import { useSearchParams } from "next/navigation";
 
-export function BiblePage({
-  version,
-  book,
-}: {
-  version: string;
-  book: string;
-}) {
+function BiblePage({ version, book }: { version: string; book: string }) {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
   const [highlight, setHighlight] = useState(false);
@@ -166,5 +160,19 @@ export function BiblePage({
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export function BiblePageWrapper({
+  version,
+  book,
+}: {
+  version: string;
+  book: string;
+}) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BiblePage version={version} book={book} />
+    </Suspense>
   );
 }

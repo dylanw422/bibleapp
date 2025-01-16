@@ -1,4 +1,4 @@
-import { BiblePage } from "@/components/bible-page";
+import { BiblePageWrapper as BiblePage } from "@/components/bible-page";
 
 export default async function Page({
   params,
