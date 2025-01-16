@@ -75,7 +75,7 @@ export function BiblePage({
     }
   }, [queryVerse, queryChapter]);
 
-  const captureCursorPosition = (event) => {
+  const captureCursorPosition = (event: React.MouseEvent) => {
     setCursorPosition({
       x: event.clientX + window.scrollX,
       y: event.clientY + window.scrollY,

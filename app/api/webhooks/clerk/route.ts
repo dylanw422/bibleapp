@@ -49,14 +49,13 @@ export async function POST(req: Request) {
   }
 
   const eventType = evt.type;
-  const eventData = evt.data;
-  const id = eventData.id!;
-  const name = eventData.first_name + " " + eventData.last_name;
-  const email = eventData.email_addresses[0].email_address;
 
   if (eventType === "user.created") {
+    const id = evt.data.id!;
+    const name = evt.data.first_name + " " + evt.data.last_name;
+    const email = evt.data.email_addresses[0].email_address;
+
     createUser(name, email, id);
-    console.log("event data: ", eventData);
   }
 
   return new Response("Webhook received", { status: 200 });
