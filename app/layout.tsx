@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "The Sword",
+  title: "GoTheWay",
   description: "A modern Bible study app",
 };
 
