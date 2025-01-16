@@ -59,7 +59,7 @@ export function InterlinearContent({
             <Card>
               <CardHeader>
                 <CardTitle>
-                  {currentVersion.toUpperCase()} Translation
+                  {currentVersion?.toUpperCase()} Translation
                 </CardTitle>
               </CardHeader>
               <CardContent>

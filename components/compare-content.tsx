@@ -44,7 +44,7 @@ export function CompareContent({
           <div className="space-y-8">
             <div className="space-y-4">
               <h2 className="text-lg font-semibold">
-                {currentVersion.toUpperCase()}
+                {currentVersion?.toUpperCase()}
               </h2>
               <div className="rounded-md bg-primary/5 p-4">
                 {verse?.text.split(/(<.*?>)/g).map((part, i) => {
@@ -75,7 +75,7 @@ export function CompareContent({
                   if (matchingVerse) {
                     return (
                       <div key={bibleKey} className="">
-                        <h3 className="font-bold">{bibleKey.toUpperCase()}</h3>
+                        <h3 className="font-bold">{bibleKey?.toUpperCase()}</h3>
                         <p className="rounded-md bg-secondary/20 p-3">
                           {matchingVerse.text
                             .replace(/\n/g, "")

@@ -13,7 +13,7 @@ const versions = ["NKJV", "KJV", "NIV", "ESV", "NLT"];
 export function VersionSelect() {
   const router = useRouter();
   const pathname = usePathname();
-  const currentVersion = pathname.split("/")[2].toUpperCase();
+  const currentVersion = pathname.split("/")[2]?.toUpperCase();
 
   const handleVersionChange = (version: string) => {
     // Extract the base URL path (book and chapter)
